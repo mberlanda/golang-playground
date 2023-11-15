@@ -1,6 +1,7 @@
 package exercises
 
 import (
+	"fmt"
 	"reflect"
 	"sort"
 	"testing"
@@ -42,15 +43,22 @@ func TestGroupAnagrams(t *testing.T) {
 			strs:     []string{"a"},
 			expected: [][]string{{"a"}},
 		},
-		// Add more test cases here if needed
 	}
 
-	for _, test := range tests {
-		t.Run("", func(t *testing.T) {
-			result := groupAnagrams(test.strs)
-			if !are2DSlicesEqual(result, test.expected) {
-				t.Errorf("Expected %v, but got %v", test.expected, result)
-			}
-		})
+	functions := map[string]func([]string) [][]string{
+		"groupAnagramsSerial":     groupAnagrams,
+		"groupAnagramsGoRoutines": groupAnagramsGoRoutines,
+		"groupAnagramsPool":       groupAnagramsPool,
+	}
+
+	for name, groupFn := range functions {
+		for _, test := range tests {
+			t.Run(fmt.Sprintf("%s-%v", name, test.strs), func(t *testing.T) {
+				result := groupFn(test.strs)
+				if !are2DSlicesEqual(result, test.expected) {
+					t.Errorf("Expected %v, but got %v", test.expected, result)
+				}
+			})
+		}
 	}
 }

@@ -3,13 +3,13 @@
 BINARY_NAME=golang-playground
 
 build:
-	@go build -o $(BINARY_NAME)
+	@go build -o $(BINARY_NAME) ./...
 
 run: build
 	@./$(BINARY_NAME)
 
 test:
-	@go test ./...
+	@go test -v ./...
 
 clean:
 	@go clean
